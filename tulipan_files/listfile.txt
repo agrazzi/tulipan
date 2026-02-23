@@ -1,0 +1,4 @@
+/path/to/traj_1.xtc
+/path/to/traj_2.xtc
+/path/to/traj_3.xtc
+/path/to/traj_4.xtc
