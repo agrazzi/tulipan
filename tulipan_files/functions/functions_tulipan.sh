@@ -22,7 +22,7 @@ function parse_gro {
     #Extract all ligands present in simulation box 
         cp ${gro_conf} temp_gro.txt 
         sed -i '1,2d' temp_gro.txt
-        grep "$ligname" temp_gro.txt > ligpos.txt
+        grep "$ligname" temp_gro.txt > ligpos.txt || { echo "Error: Residue $ligname not found in reference gro file, check the setup variable \$ligname ..."; exit 1; } 
         rm temp_gro.txt			
     #Compute number of ligands
         ((tot_lig=$(< ligpos.txt wc -l)/lig_comp))
@@ -401,7 +401,7 @@ function centroid_generation {
 
     echo -e "System\n" | gmx trjconv -f ${ligdir}/${evdir}/${subevdir}/${subdir}/${subevent} -s ${prot_onelig_tpr}  -b "${ref_lcl}" -e "${ref_lcl}" -n ${ligdir}/${prot_lig_ndx} -o ${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_pdb} > /dev/null 2> log_extraction_subcluster_${submt}.log
     #Extraction
-    gmx grompp -f ${mdp} -p ${topol_prot_onelig} -c "${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_pdb}" -o "${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_tpr}" > /dev/null 2> log_grompp.log
+    gmx grompp -f ${mdp} -p ${topol_prot_onelig} -c "${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_pdb}" -o "${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_tpr}" -maxwarn 50 > /dev/null 2> log_grompp.log
     if [ ! -f "${ligdir}/${evdir}/${subevdir}/${subdir}/${subev_tpr}" ]; then
         echo "[ERROR]:  ${cntrd_dir}/${subev_tpr} not generated"
         exit
@@ -443,7 +443,7 @@ function centroid_consistency {
     awk -v rep="$tgtdir" -v lig="$lignmID" -v ev="$ev" -v subev="$sub" -v sr="${serial}" '
     ARGIND==1{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; c++;sum+=$2} 
     ARGIND==2 && FNR==1 {avg=sum/c}
-    ARGIND==2{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; sumq+=((avg-$2)**2)}
+    ARGIND==2{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; sumq+=((avg-$2)^2)}
     END{printf("%s %s %d %d %f %f %d %d\n",rep,lig,ev,subev,avg,sqrt(sumq/(c-1)),c,sr)}' ${cntrd_dir}/${outxvg} ${cntrd_dir}/${outxvg} > "${cntrd_dir}/${avgtxt}"
 
 }
@@ -565,7 +565,7 @@ function binding_statistics {
             if(i==nlig)
                 { 	avg[j]=sumpb/nlig
                     for(i=1;i<=nlig;i++)
-                        sumq[j]+=((avg[j]-pb[i])**2)
+                        sumq[j]+=((avg[j]-pb[i])^2)
                     if (nlig==1)
 	        	devst[j]=sqrt(sumq[j]/(nlig))
                     else
@@ -581,7 +581,7 @@ function binding_statistics {
                 sum+=avg[k]
             avgtot=sum/j
             for(k=0;k<j;k++)
-                sumqtot+=((avg[k]-avgtot)**2)
+                sumqtot+=((avg[k]-avgtot)^2)
             if(j==1)
         	devsttot=sqrt(sumqtot)
         else	

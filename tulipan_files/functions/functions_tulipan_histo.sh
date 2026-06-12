@@ -168,7 +168,7 @@ function histo_fit {
             if [ "$test" -eq "1" ];then
                 #Estimator for continuos distribution
                 fitdatadns+=$(grep "RMSE " ${outpath}/${fitprmdns[$k]} | awk '{printf(" %.4f" ,$3)}')
-                local estimator=$(echo "$AEst $TauEst $smpAvg" | awk '{print log($1*($2**2)/($3))/log(10)}')
+                local estimator=$(echo "$AEst $TauEst $smpAvg" | awk '{print log($1*($2^2)/($3))/log(10)}')
                 fitdatadns+=" $estimator"
             else
                 #No fit, filler value for RMSE and MagnitudeEstimator 

@@ -56,7 +56,7 @@ function event_rms {
                 awk -v rep="$rep" -v lig="$lignmID" -v ev="$ev" -v subev="$sub" -v sr="$serial" '
                 ARGIND==1{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; c++;sum+=$2} 
                 ARGIND==2 && FNR==1 {avg=sum/c}
-                ARGIND==2{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; sumq+=((avg-$2)**2)}
+                ARGIND==2{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; sumq+=((avg-$2)^2)}
                 END{printf("%s %s %d %d %f %f %d %d\n",rep,lig,ev,subev,avg,sqrt(sumq/(c-1)),c,sr)}' ${tgtdir}/${outxvg} ${tgtdir}/${outxvg} > "${tgtdir}/${avgtxt}"
                 if [ ! -f "${tgtdir}/${avgtxt}" ]; then
                     echo "inside Missing ${tgtdir}/${avgtxt}"
@@ -151,7 +151,7 @@ function avg_dur_supracluster {
         END{    avg=sum/l; 
             if (l>1)
             {       for(j=1;j<=l;j++)
-                            sumq+=((avg-dur[j])**2)
+                            sumq+=((avg-dur[j])^2)
                     dev=sqrt(sumq/(l-1))
                     printf("%s %s %d %.2f %.2f %d %d\n",dmn,scid,l,avg,dev,topid,maxdur)>>outfile
             }
@@ -220,8 +220,8 @@ function supracluster_coverage {
             avgboundcvg=sumboundcvg/totrep
             if (totrep>1)
                 {   for (i=1;i<=totrep;i++)
-                        {   sumqtotcvg+=((totcvg[i]-avgtotcvg)**2)
-                            sumqboundcvg+=((boundcvg[i]-avgboundcvg)**2)
+                        {   sumqtotcvg+=((totcvg[i]-avgtotcvg)^2)
+                            sumqboundcvg+=((boundcvg[i]-avgboundcvg)^2)
                         }
                     devtotcvg=sqrt(sumqtotcvg/(totrep-1))
                     devboundcvg=sqrt(sumqboundcvg/(totrep-1))
@@ -517,7 +517,7 @@ function histo_fit {
             if [ "$test" -eq "1" ];then
                 #Estimator for continuos distribution
                 fitdatadns+=$(grep "RMSE " ${outpath}/${fitprmdns[$k]} | awk '{printf(" %.4f" ,$3)}')
-                local estimator=$(echo "$AEst $TauEst $smpAvg" | awk '{print log($1*($2**2)/($3))/log(10)}')
+                local estimator=$(echo "$AEst $TauEst $smpAvg" | awk '{print log($1*($2^2)/($3))/log(10)}')
                 fitdatadns+=" $estimator"
             else
                 #No fit, filler value for RMSE and MagnitudeEstimator 

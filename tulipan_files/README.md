@@ -89,6 +89,15 @@ To run the analysis,  execute:
 ###Python 3 Requirements
 The fitting procedure for the residence time estimation requires some basic Python libraries. In particular the modules `numpy`, `matplotlib` and `scipy` will be used.
     
+# Technical notes
+- Some functions of the script rely on AWK for processing of the text results from GROMACS tools. In particular GNU-AWK is required, since some functionalities rely on the ARGIND keyword
+- During the analysis, the script attempts to generate `.tpr` files for the cluster centroids. Please ensure that the reference files provided via the `-m` and `-p` flags can successfully generate a `.tpr` file without errors. 
+You can verify your files beforehand by running a test command such as:
+
+```bash
+gmx grompp -f mdp.mdp -p topol_onelig.top -c prot_onelig.gro -o test.tpr
+```
+
 # Analysis of the results
 ## Part 1 
 As the analysis progresses, the results will be stored according to this general architecture
