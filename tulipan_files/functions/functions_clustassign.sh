@@ -41,23 +41,24 @@ function centroid_exists {
     
 }
 
-#event_analysis $line ${cntrd_tpr}
+#event_analysis $line ${cntrd_tpr} $dt
 function event_rms {     
                 local serial=$(echo "$1" | awk '{print $2}')
                 local rep=$(echo "$1" | awk '{print $3}')
                 local lignmID=$(echo "$1" | awk '{print $4}')
                 local ev=$(echo "$1" | awk '{print $5}')
                 local sub=$(echo "$1" | awk '{print $6}')
+                local dt=$3
                 local prot_lig_ndx="${rep}/${lignmID}/prot_${lignmID}.ndx"
                 local outxvg="rmsd_cntrd_${iter}_vs_${rep}_${lignmID}_ev${ev}_sub${sub}.xvg"
                 local subevent_xtc="${rep}/${lignmID}/ev_${ev}/subevents_${method[$k]}_${thr[$k]}/sub_${sub}/${lignmID}_ev_${ev}_sub_${sub}.xtc"
                 echo "${lignmID}" | gmx rms -f ${subevent_xtc} -s $2 -o ${tgtdir}/${outxvg} -n  ${prot_lig_ndx} -fit none > /dev/null 2> log_rms.log
                 local avgtxt="rmsd_cntrd_${iter}_vs_${rep}_${lignmID}_ev${ev}_sub${sub}.txt"
-                awk -v rep="$rep" -v lig="$lignmID" -v ev="$ev" -v subev="$sub" -v sr="$serial" '
+                awk -v dt=$dt -v rep="$rep" -v lig="$lignmID" -v ev="$ev" -v subev="$sub" -v sr="$serial" '
                 ARGIND==1{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; c++;sum+=$2} 
                 ARGIND==2 && FNR==1 {avg=sum/c}
                 ARGIND==2{if (substr($0,1,1)=="#" || substr($0,1,1)=="@") next; sumq+=((avg-$2)^2)}
-                END{printf("%s %s %d %d %f %f %d %d\n",rep,lig,ev,subev,avg,sqrt(sumq/(c-1)),c,sr)}' ${tgtdir}/${outxvg} ${tgtdir}/${outxvg} > "${tgtdir}/${avgtxt}"
+                END{printf("%s %s %d %d %f %f %d %d\n",rep,lig,ev,subev,avg,sqrt(sumq/(c-1)),c*dt,sr)}' ${tgtdir}/${outxvg} ${tgtdir}/${outxvg} > "${tgtdir}/${avgtxt}"
                 if [ ! -f "${tgtdir}/${avgtxt}" ]; then
                     echo "inside Missing ${tgtdir}/${avgtxt}"
                     exit

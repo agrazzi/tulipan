@@ -3,7 +3,7 @@
 # Step 1 of TULIPAN analysis protocol
 ##
 source "/usr/local/gromacs/bin/GMXRC"
-source "/path/to/functions/functions_tulipan.sh"
+source "/path/to/tulipan_files/functions/functions_tulipan.sh"
 
 Help(){
 	echo -e "-c file.gro\n-s topol.tpr\n-f trajlist.txt\n-l prot_onelig.tpr\n-p top_prot_onelig.top\n-m mdp.mdp\n"
@@ -44,12 +44,12 @@ for k in "${!flag[@]}"; do
     
     # Extract the last 3 characters of the flag value
     end="${!flagvar[$k]: -3}"
-    
     # Check if the last 3 characters match the expected extension
     if [ "$end" != "${extension[$k]}" ]; then
         echo "Flag ${flag[$k]}: expected extension '${extension[$k]}', but got '$end'"
         exit 1
     fi
+
 done
 ###
 
@@ -57,15 +57,15 @@ done
 
     ## Workspace definition
         # Name of the output directory
-        workdir="test"
+        workdir="test_v5"
         # Limit on parallel tasks
-        N=3
+        N=6
 
     ## Description of the biosystem
         # Ligand name
-        ligname=COMB
+        ligname=COLC
         #ligand composition (how many beads)
-        lig_comp=11
+        lig_comp=12
 
     ## Contacts approach parameters
         # Minimum number of protein-ligand contacts for annotation as "Bound" 
@@ -103,15 +103,16 @@ done
     cd $workdir
     ### Check file existence
     for k in "${!flag[@]}"; do
-        # Fetch the actual file path stored in the variable dynamically
-        file_path="${!flagvar[$k]}"
-        if [ ! -f "$file_path" ]; then
-            echo "Error: File '$file_path' (provided by flag ${flag[$k]}) does not exist."
-            exit 1
-        fi
-        # -------------------------------------------------------------
+    # Fetch the actual file path stored in the variable dynamically
+    	file_path="${!flagvar[$k]}"
+	if [ ! -f "$file_path" ]; then
+		echo "Error: File '$file_path' (provided by flag ${flag[$k]}) does not exist."
+	        exit 1
+	fi
+	# -------------------------------------------------------------
     done
     ###
+
     mkdir log/
 
 # Begin time measurement
@@ -492,8 +493,7 @@ echo -e "\n##########\n"
             fi
             ((submt=submt+1))
             echo -ne "\rChecking existence of rmsd-consistency for centroid [$submt]/[$nsubmt]"
-            centroid_check $line
-            
+            centroid_check $line           
         done<"prerefine_sp_events_${method[$k]}_${thr[$k]}_serial.txt"
 
         echo ""

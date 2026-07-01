@@ -3,14 +3,14 @@
 # Step 2 of TULIPAN analysis protocol
 ##
 source "/usr/local/gromacs/bin/GMXRC"
-source "/path/to/functions/functions_clustassign.sh"
-source "/path/to/functions/functions_tulipan_histo.sh"
+source "/path/to/tulipan_files/functions/functions_clustassign.sh"
+source "/path/to/tulipan_files/functions/functions_tulipan_histo.sh"
 
 
 #Files for fitting procedure with python
-blankfit="/path/to/functions/temp_fit_prob.py"
-blankfitdens="/path/to/functions/temp_fit_dens.py"
-temphisto="/path/to/functions/temp_multihisto_v2.py"
+blankfit="/path/to/tulipan_files/functions/temp_fit_prob.py"
+blankfitdens="/path/to/tulipan_files/functions/temp_fit_dens.py"
+temphisto="/path/to/tulipan_files/functions/temp_multihisto_v2.py"
 
 #Files for VMD visualization
 refbondpdb="/path/to/templates/prot_onelig.pdb"
@@ -32,12 +32,10 @@ done
 
 ###Variable definition
     ##Workspace definition
-        workdir="test"
-        N=2
+        workdir="test_v4"
+        N=6
     ##Biosystem
-        ligname=COMB
-    ##Framerate of input trajectory: 1 ns /frame
-        dt=1
+        ligname=COLC
     ##Refinement previously applied
         method=("gromos" )
         thr=("0.4")
@@ -67,7 +65,7 @@ done
 
 
 
-
+dt=2
 
 
 
@@ -163,7 +161,7 @@ for k in ${!method[@]}; do
                 if [ "${input::1}" = "#" ];then
                     continue
                 fi
-                (event_rms "$input" "${cntrd_tpr}" "$dt") &
+                (event_rms "$input" "${cntrd_tpr}" "$dt")  &
                 ((submt=submt+1))
                 echo -ne "\rSubmitted [$submt]/[$ue]"
                 sleep 0.1

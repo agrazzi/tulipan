@@ -1,0 +1,15 @@
+trajectories/fit_r1_d1000.xtc
+trajectories/fit_r2_d1000.xtc
+trajectories/fit_r3_d1000.xtc
+trajectories/fit_r4_d1000.xtc
+trajectories/fit_r5_d1000.xtc
+trajectories/fit_r6_d1000.xtc
+trajectories/fit_r7_d1000.xtc
+trajectories/fit_r8_d1000.xtc
+trajectories/fit_r9_d1000.xtc
+trajectories/fit_r10_d1000.xtc
+trajectories/fit_r11_d1000.xtc
+trajectories/fit_r12_d1000.xtc
+trajectories/fit_r13_d1000.xtc
+trajectories/fit_r14_d1000.xtc
+trajectories/fit_r15_d1000.xtc
