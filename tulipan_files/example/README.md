@@ -12,7 +12,7 @@ This dataset is provided as an example of the expected input organization and to
 
 ## Downloading the Example Dataset
 
-To keep the repository lightweight, the input trajectories and example output files are distributed separately as ZIP archives through Zenodo.
+To keep the repository lightweight, the input trajectories and example output files are distributed separately as ZIP archives through [Zenodo](https://doi.org/10.5281/zenodo.21098229).
 
 Download the following files from the Zenodo record:
 
