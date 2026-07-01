@@ -90,7 +90,8 @@ To run the analysis,  execute:
 The fitting procedure for the residence time estimation requires some basic Python libraries. In particular the modules `numpy`, `matplotlib` and `scipy` will be used.
     
 # Technical notes
-- Some functions of the script rely on AWK for processing of the text results from GROMACS tools. In particular GNU-AWK is required, since some functionalities rely on the ARGIND keyword
+- Some functions of the script rely on AWK for processing of the text results from GROMACS tools. In particular GNU-AWK is required, since some functionalities rely on the ARGIND keyword;
+- The script has been tested with trajectories having a framerate of 1 frame/ns. Different framerates should be applicable by changing the `dt` variable in the `tulipan_clust_assign.sh` (e.g `dt=2` for 1 frame every 2 ns of MD), although this has note been extensively tested;
 - During the analysis, the script attempts to generate `.tpr` files for the cluster centroids. Please ensure that the reference files provided via the `-m` and `-p` flags can successfully generate a `.tpr` file without errors. 
 You can verify your files beforehand by running a test command such as:
 
