@@ -1,4 +1,3 @@
----
 # Introduction
 
 This README describes the application of the **TULIPAN** workflow to a set of coarse-grained molecular dynamics (CG-MD) trajectories modeling the binding of **colchicine** to **colchicalin** from the bulk solvent.
@@ -61,8 +60,6 @@ trajectories/fit_r15_d1000.xtc
 ```
 
 This file defines the trajectories that will be processed by the workflow. Using a list file allows analyses to be run on any subset of trajectories without modifying the scripts.
-
----
 
 ## `reference_files/`
 
